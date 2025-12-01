@@ -34,16 +34,19 @@ chmod +x build.sh package.sh
 ### Windows 环境
 
 1. **安装 Qt 5.15.2+**
+
    ```bash
    # 下载并安装 Qt Open Source
    # 下载地址: https://download.qt.io/archive/qt/5.15/5.15.2/
    ```
 
 2. **安装 Visual Studio 2019+**
+
    - 包含 Windows SDK
    - 安装 Visual C++ 构建工具
 
 3. **安装 OpenSSL**
+
    ```bash
    # 下载 OpenSSL-Win64
    # 设置环境变量 OPENSSL_LIB_PATH
@@ -57,25 +60,39 @@ chmod +x build.sh package.sh
 ### macOS 环境
 
 1. **安装 Xcode 命令行工具**
+
    ```bash
    xcode-select --install
    ```
 
 2. **安装 Qt 5.15.2+**
+
    ```bash
-   # 使用 Homebrew 或从官网下载
-   brew install qt@5 qtcharts
+   # 使用 Homebrew 安装（Qt Charts 已包含在 qt@5 中）
+   brew install qt@5
+
+   # 将 Qt 添加到 PATH（M1/ARM Mac）
+   echo 'export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"' >> ~/.zshrc
+   source ~/.zshrc
+
+   # 或者对于 Intel Mac
+   # echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.zshrc
    ```
 
-3. **安装其他工具**
+3. **验证安装**
+
    ```bash
-   # hdiutil (系统自带)
-   # macdeployqt (Qt 工具)
+   # 检查 qmake 版本
+   qmake --version
+
+   # 检查 macdeployqt 是否可用
+   which macdeployqt
    ```
 
 ### Linux 环境
 
 1. **安装依赖**
+
    ```bash
    # Ubuntu/Debian
    sudo apt-get update
@@ -199,12 +216,14 @@ chmod +x ../bin/linux/release/resp
 ### Windows 打包 (NSIS)
 
 **自动化打包：**
+
 ```bash
 ./package.sh windows 2024.1.0
 # 输出：packages/2024.1.0/resp-2024.1.0.exe
 ```
 
 **手动打包：**
+
 ```bash
 cd build/windows/installer
 
@@ -216,7 +235,8 @@ makensis installer.nsi
 ```
 
 **安装程序特性：**
-- 64位仅支持
+
+- 64 位仅支持
 - 自动升级检测
 - Visual C++ 运行时安装
 - 开始菜单和桌面快捷方式
@@ -226,12 +246,14 @@ makensis installer.nsi
 ### macOS 打包 (DMG)
 
 **自动化打包：**
+
 ```bash
 ./package.sh macos 2024.1.0
 # 输出：packages/2024.1.0/RESP-2024.1.0.dmg
 ```
 
 **手动打包：**
+
 ```bash
 # 1. 部署 Qt 框架
 macdeployqt bin/osx/release/RESP.app
@@ -254,6 +276,7 @@ rm -rf dmg_temp
 ```
 
 **DMG 特性：**
+
 - 标准 macOS 应用程序包
 - 应用程序链接到 /Applications
 - 高 DPI 支持
@@ -263,6 +286,7 @@ rm -rf dmg_temp
 ### Linux 打包
 
 **自动化打包：**
+
 ```bash
 ./package.sh linux 2024.1.0
 # 输出：
@@ -271,6 +295,7 @@ rm -rf dmg_temp
 ```
 
 **手动打包：**
+
 ```bash
 # 1. 创建包结构
 mkdir -p resp_app_pkg/opt/resp_app
@@ -296,6 +321,7 @@ rm -rf resp_app_pkg
 ```
 
 **包格式：**
+
 - **TAR.GZ**: 通用压缩包，包含安装脚本
 - **DEB**: Debian/Ubuntu 包，自动依赖管理
 - **安装路径**: `/opt/resp_app`
@@ -305,7 +331,7 @@ rm -rf resp_app_pkg
 
 ### Windows 特性
 
-- **架构**: 仅支持 64位 (x86_64)
+- **架构**: 仅支持 64 位 (x86_64)
 - **依赖检查**: 自动安装 Visual C++ Redistributable
 - **升级**: 自动检测和升级旧版本
 - **卸载**: 完整的卸载和清理
@@ -332,6 +358,7 @@ rm -rf resp_app_pkg
 ### 构建问题
 
 **问题**: `qmake: command not found`
+
 ```bash
 # 解决方案
 export PATH=$PATH:/path/to/qt/bin
@@ -340,6 +367,7 @@ sudo apt-get install qt5-qmake  # Linux
 ```
 
 **问题**: `fatal error: 'QtCharts/QChartView': file not found`
+
 ```bash
 # 解决方案
 # 确保安装了 Qt Charts 模块
@@ -348,6 +376,7 @@ qmake "CONFIG+=release" "QT+=charts"
 ```
 
 **问题**: 链接错误 - 找不到 OpenSSL
+
 ```bash
 # 解决方案 (Windows)
 set OPENSSL_LIB_PATH=C:\OpenSSL-Win64\lib\VC
@@ -359,6 +388,7 @@ sudo apt-get install libssl-dev
 ### 打包问题
 
 **问题**: Windows 安装程序大小过大
+
 ```bash
 # 解决方案
 # 在 installer.nsi 中启用压缩
@@ -366,6 +396,7 @@ SetCompressor /SOLID /FINAL lzma
 ```
 
 **问题**: macOS DMG 无法在旧系统上运行
+
 ```bash
 # 解决方案
 # 检查最低系统版本
@@ -373,6 +404,7 @@ SetCompressor /SOLID /FINAL lzma
 ```
 
 **问题**: Linux 依赖未满足
+
 ```bash
 # 解决方案
 # 安装系统依赖
@@ -385,6 +417,7 @@ qmake "CONFIG+=static"
 ### 运行时问题
 
 **问题**: Windows 提示缺少 DLL
+
 ```bash
 # 解决方案
 # 使用依赖检查工具
@@ -393,6 +426,7 @@ qmake "CONFIG+=static"
 ```
 
 **问题**: macOS Gatekeeper 阻止运行
+
 ```bash
 # 解决方案
 # 代码签名应用
@@ -406,6 +440,7 @@ xcrun altool --notarize-app --primary-bundle-id "com.redisdesktop.rdm" \
 ```
 
 **问题**: Linux 权限被拒绝
+
 ```bash
 # 解决方案
 chmod +x bin/linux/release/resp
@@ -415,11 +450,11 @@ sudo ./install.sh
 
 ## 📊 构建和打包矩阵
 
-| 平台 | 构建工具 | 打包工具 | 输出格式 | 依赖 |
-|------|----------|----------|----------|------|
-| Windows | qmake + nmake | NSIS | .exe | Qt 5.15+, VC++ 2019+, OpenSSL |
-| macOS | qmake + make | hdiutil | .dmg | Qt 5.15+, Xcode tools |
-| Linux | qmake + make | tar + dpkg-deb | .tar.gz, .deb | Qt 5.15+, system libs |
+| 平台    | 构建工具      | 打包工具       | 输出格式      | 依赖                          |
+| ------- | ------------- | -------------- | ------------- | ----------------------------- |
+| Windows | qmake + nmake | NSIS           | .exe          | Qt 5.15+, VC++ 2019+, OpenSSL |
+| macOS   | qmake + make  | hdiutil        | .dmg          | Qt 5.15+, Xcode tools         |
+| Linux   | qmake + make  | tar + dpkg-deb | .tar.gz, .deb | Qt 5.15+, system libs         |
 
 ## 🎯 最佳实践
 

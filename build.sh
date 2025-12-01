@@ -161,7 +161,7 @@ build_macos() {
     fi
 
     # 部署 Qt 框架
-    if command -v macdeployqt &> /dev/null; then
+    if ! command -v macdeployqt &> /dev/null; then
         log_warning "macdeployqt 未找到，请手动部署 Qt 框架"
     else
         log_info "部署 Qt 框架..."

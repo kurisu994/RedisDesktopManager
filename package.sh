@@ -165,7 +165,6 @@ package_macos() {
         log_info "更新 Info.plist..."
         cp "src/resources/Info.plist.sample" "$APP_BUNDLE/Contents/Info.plist"
         sed -i '' "s/0.0.0/$VERSION/g" "$APP_BUNDLE/Contents/Info.plist"
-        sed -i '' "s/<string>0.0.0<\/string>/<string>$VERSION<\/string>/g" "$APP_BUNDLE/Contents/Info.plist"
     fi
 
     # 创建临时 DMG 目录
@@ -182,6 +181,7 @@ package_macos() {
 
     # 可选：添加背景图片和图标位置
     if [ -f "build/dmg_background.png" ]; then
+        mkdir -p "$DMG_TEMP/.background"
         cp "build/dmg_background.png" "$DMG_TEMP/.background/"
     fi
 
