@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Controls as LC
 import QtQuick.Window
 import QtCharts
 import "./../common"
@@ -43,48 +42,84 @@ ServerAction {
             }
         }
 
-        LegacyTableView {
+        ListView {
             Layout.fillHeight: true
             Layout.fillWidth: true
+            clip: true
 
             model: tab.model.slowLog ? tab.model.slowLog : []
 
-            LC.TableViewColumn {
-                role: "cmd"
-                title: qsTranslate("RESP","Command")
-                width: 600
+            header: Rectangle {
+                width: parent.width
+                height: 30
+                color: sysPalette.mid
+                z: 2
 
-                delegate: BetterLabel {
-                    text: {
-                        var result = "";
-                        for (var index in modelData['cmd']) {
-                            result += modelData['cmd'][index] + " ";
+                Row {
+                    anchors.fill: parent
+                    Rectangle {
+                        width: 600; height: 30; color: "transparent"; border.color: sysPalette.dark
+                        Text { anchors.fill: parent; anchors.margins: 4; text: qsTranslate("RESP","Command"); font.bold: true; color: sysPalette.text; verticalAlignment: Text.AlignVCenter }
+                    }
+                    Rectangle {
+                        width: 150; height: 30; color: "transparent"; border.color: sysPalette.dark
+                        Text { anchors.fill: parent; anchors.margins: 4; text: qsTranslate("RESP","Processed at"); font.bold: true; color: sysPalette.text; verticalAlignment: Text.AlignVCenter }
+                    }
+                    Rectangle {
+                        width: 150; height: 30; color: "transparent"; border.color: sysPalette.dark
+                        Text { anchors.fill: parent; anchors.margins: 4; text: qsTranslate("RESP","Execution Time (μs)"); font.bold: true; color: sysPalette.text; verticalAlignment: Text.AlignVCenter }
+                    }
+                }
+            }
+
+            delegate: Rectangle {
+                width: parent.width
+                height: 30
+                color: index % 2 === 0 ? "transparent" : sysPalette.alternateBase
+
+                Row {
+                    anchors.fill: parent
+
+                    Rectangle {
+                        width: 600; height: 30; color: "transparent"
+                        BetterLabel {
+                            anchors.fill: parent; anchors.margins: 4
+                            text: {
+                                var result = "";
+                                var cmd = modelData['cmd'];
+                                if (cmd) {
+                                    for (var idx in cmd) {
+                                        result += cmd[idx] + " ";
+                                    }
+                                }
+                                return result;
+                            }
+                            elide: Text.ElideRight
                         }
-                        return result;
                     }
-                    elide: styleData.elideMode
-                }
-            }
 
-            LC.TableViewColumn {
-                role: "time"
-                title: qsTranslate("RESP","Processed at")
-                width: 150
-
-                delegate: BetterLabel {
-                    text: {
-                        return new Date(modelData['time']*1000).toLocaleString(
-                                    locale, PlatformUtils.dateTimeFormat);
+                    Rectangle {
+                        width: 150; height: 30; color: "transparent"
+                        BetterLabel {
+                            anchors.fill: parent; anchors.margins: 4
+                            text: {
+                                return new Date(modelData['time']*1000).toLocaleString(
+                                            locale, PlatformUtils.dateTimeFormat);
+                            }
+                            elide: Text.ElideRight
+                        }
                     }
-                    elide: styleData.elideMode
+
+                    Rectangle {
+                        width: 150; height: 30; color: "transparent"
+                        Text {
+                            anchors.fill: parent; anchors.margins: 4
+                            text: modelData['exec_time'] || ""
+                            elide: Text.ElideRight; verticalAlignment: Text.AlignVCenter
+                            color: sysPalette.text
+                        }
+                    }
                 }
-
-            }
-
-            LC.TableViewColumn {
-                role: "exec_time"
-                title: qsTranslate("RESP","Execution Time (μs)")
-                width: 150
             }
         }
     }

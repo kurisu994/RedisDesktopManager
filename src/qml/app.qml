@@ -340,8 +340,6 @@ ApplicationWindow {
 
                     onClicked: {
                         connectionsTree.sortConnections = true
-                        connectionsTree.selection.clear()
-                        connectionsTree.backgroundVisible = true
 
                         connectionsManager.collapseRootItems()
 
@@ -361,7 +359,6 @@ ApplicationWindow {
 
                     onClicked: {
                         connectionsTree.sortConnections = false
-                        connectionsTree.backgroundVisible = false
                         connectionsManager.applyGroupChanges()
                         sortButton.visible = true
                     }

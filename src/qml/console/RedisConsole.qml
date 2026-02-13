@@ -63,8 +63,8 @@ Rectangle {
     BaseConsole {
         id: textArea
         anchors.fill: parent
-        backgroundVisible: false
-        textColor: "yellow"
+        background: null
+        color: "yellow"
         readOnly: root.promptLength == 0 || blockAllInput
         textFormat: TextEdit.RichText
         menu: null
@@ -191,7 +191,7 @@ Rectangle {
 
             MenuItem {
                 text: qsTranslate("RESP","Clear")
-                iconSource: PlatformUtils.getThemeIcon("cleanup.svg")
+                icon.source: PlatformUtils.getThemeIcon("cleanup.svg")
                 onTriggered: {
                     root.clear()
                     root.displayPrompt()
@@ -209,75 +209,118 @@ Rectangle {
         y: textArea.cursorRectangle? textArea.cursorRectangle.y + 20 : 0
         z: 255
         visible: {
-            return cmdAutocomplete.rowCount > 0
+            return cmdAutocomplete.count > 0
                     && autocompleteModel.filterString.length > 0
                     && textArea.cursorPosition >= textArea.commandStartPos
         }
 
-        TableView {
+        ListView {
             id: cmdAutocomplete            
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+            clip: true
 
             model: autocompleteModel
 
-            headerVisible: true
+            header: Rectangle {
+                width: cmdAutocomplete.width
+                height: 30
+                color: sysPalette.mid
+                z: 2
 
-            TableViewColumn {
-                title: "Command"
-                role: "name"
-                width: 120
-            }
-
-            TableViewColumn {
-                title: qsTranslate("RESP","Arguments")
-                role: "arguments"
-                width: 250
-            }
-
-            TableViewColumn {
-                title: qsTranslate("RESP","Description")
-                role: "summary"
-                width: 350
-            }
-
-            TableViewColumn {
-                title: qsTranslate("RESP","Available since")
-                role: "since"
-                width: 60
-            }
-
-            itemDelegate: Item {
-                Text {
+                Row {
                     anchors.fill: parent
-                    color: styleData.textColor
-                    elide: styleData.elideMode
-                    text: styleData.value
-                    wrapMode: Text.WrapAnywhere
-                    maximumLineCount: 1
+                    Rectangle { width: 120; height: 30; color: "transparent"; border.color: sysPalette.dark
+                        Text { anchors.fill: parent; anchors.margins: 4; text: "Command"; font.bold: true; color: sysPalette.text; verticalAlignment: Text.AlignVCenter }
+                    }
+                    Rectangle { width: 250; height: 30; color: "transparent"; border.color: sysPalette.dark
+                        Text { anchors.fill: parent; anchors.margins: 4; text: qsTranslate("RESP","Arguments"); font.bold: true; color: sysPalette.text; verticalAlignment: Text.AlignVCenter }
+                    }
+                    Rectangle { width: 350; height: 30; color: "transparent"; border.color: sysPalette.dark
+                        Text { anchors.fill: parent; anchors.margins: 4; text: qsTranslate("RESP","Description"); font.bold: true; color: sysPalette.text; verticalAlignment: Text.AlignVCenter }
+                    }
+                    Rectangle { width: 60; height: 30; color: "transparent"; border.color: sysPalette.dark
+                        Text { anchors.fill: parent; anchors.margins: 4; text: qsTranslate("RESP","Available since"); font.bold: true; color: sysPalette.text; verticalAlignment: Text.AlignVCenter }
+                    }
+                }
+            }
+
+            delegate: Rectangle {
+                width: cmdAutocomplete.width
+                height: 30
+                color: index % 2 === 0 ? "transparent" : sysPalette.alternateBase
+
+                property string commandName: {
+                    try {
+                        return consoleAutocompleteModel.getRow(
+                            autocompleteModel.getOriginalRowIndex(index)
+                        )["name"] || "#"
+                    } catch(err) {
+                        return "#"
+                    }
                 }
 
-                MouseArea {
-                    enabled: styleData.column === 2 || styleData.column === 0
+                Row {
                     anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        var commandName = "#"
-                        try {
-                            commandName = consoleAutocompleteModel.getRow(
-                                        autocompleteModel.getOriginalRowIndex(styleData.row)
-                            )["name"]
-                        } catch(err) {
-                            console.log("Cannot get command name:", err)
-                        }
 
-                        if (styleData.column === 2) {
-                            Qt.openUrlExternally("https://redis.io/commands/" + commandName)
-                        } else {
-                            textArea.remove(textArea.commandStartPos, textArea.cursorPosition)
-                            textArea.insert(textArea.commandStartPos, commandName)
-                            autocompleteModel.filterString = commandName
+                    // Command 列
+                    Rectangle {
+                        width: 120; height: 30; color: "transparent"
+                        Text {
+                            anchors.fill: parent; anchors.margins: 4
+                            text: model.name || ""
+                            elide: Text.ElideRight; verticalAlignment: Text.AlignVCenter
+                            color: sysPalette.text; maximumLineCount: 1
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                textArea.remove(textArea.commandStartPos, textArea.cursorPosition)
+                                textArea.insert(textArea.commandStartPos, commandName)
+                                autocompleteModel.filterString = commandName
+                            }
+                        }
+                    }
+
+                    // Arguments 列
+                    Rectangle {
+                        width: 250; height: 30; color: "transparent"
+                        Text {
+                            anchors.fill: parent; anchors.margins: 4
+                            text: model.arguments || ""
+                            elide: Text.ElideRight; verticalAlignment: Text.AlignVCenter
+                            color: sysPalette.text; maximumLineCount: 1
+                        }
+                    }
+
+                    // Description 列
+                    Rectangle {
+                        width: 350; height: 30; color: "transparent"
+                        Text {
+                            anchors.fill: parent; anchors.margins: 4
+                            text: model.summary || ""
+                            elide: Text.ElideRight; verticalAlignment: Text.AlignVCenter
+                            color: sysPalette.text; maximumLineCount: 1
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                Qt.openUrlExternally("https://redis.io/commands/" + commandName)
+                            }
+                        }
+                    }
+
+                    // Available since 列
+                    Rectangle {
+                        width: 60; height: 30; color: "transparent"
+                        Text {
+                            anchors.fill: parent; anchors.margins: 4
+                            text: model.since || ""
+                            elide: Text.ElideRight; verticalAlignment: Text.AlignVCenter
+                            color: sysPalette.text; maximumLineCount: 1
                         }
                     }
                 }

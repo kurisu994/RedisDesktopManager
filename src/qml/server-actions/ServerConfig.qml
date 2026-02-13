@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Controls as LC
 import QtQuick.Window
 import QtCharts
 import "./../common"
@@ -61,17 +60,10 @@ ServerAction {
 
                     model: modelData['section_data']
 
-                    LC.TableViewColumn {
-                        role: "name"
-                        title: qsTranslate("RESP","Property")
-                        width: 250
-                    }
-
-                    LC.TableViewColumn {
-                        role: "value"
-                        title: qsTranslate("RESP","Value")
-                        width: 350
-                    }
+                    columns: [
+                        {role: "name", title: qsTranslate("RESP","Property"), width: 250},
+                        {role: "value", title: qsTranslate("RESP","Value"), width: 350}
+                    ]
                 }
 
             }

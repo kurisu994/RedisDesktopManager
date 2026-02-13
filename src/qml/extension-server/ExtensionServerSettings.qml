@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Controls as LC
 import QtCore
 import QtQuick.Window
 import "../common"
@@ -121,31 +120,18 @@ BetterDialog {
                         }
                     }
 
-                    LC.TableView {
+                    LegacyTableView {
                         id: formattersTable
 
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.preferredHeight: 100
-                        verticalScrollBarPolicy: Qt.ScrollBarAlwaysOn
 
-                        LC.TableViewColumn {
-                            role: "id"
-                            width: 75
-                            title: qsTranslate("RESP","Id")
-                        }
-
-                        LC.TableViewColumn {
-                            width: 250
-                            role: "name"
-                            title: qsTranslate("RESP","Name")
-                        }
-
-                        LC.TableViewColumn {
-                            width: 75
-                            role: "readOnly"
-                            title: qsTranslate("RESP","Read Only")
-                        }
+                        columns: [
+                            {role: "id", title: qsTranslate("RESP","Id"), width: 75},
+                            {role: "name", title: qsTranslate("RESP","Name"), width: 250},
+                            {role: "readOnly", title: qsTranslate("RESP","Read Only"), width: 75}
+                        ]
 
                         model: formattersManager
                     }

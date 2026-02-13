@@ -1,8 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Controls as LC
-import Qt.labs.qmlmodels 1.0
 import QtQuick.Window
 import QtCharts
 import "./../common"
@@ -46,35 +44,13 @@ ServerAction {
 
             model: tab.model.clients ? tab.model.clients : []
 
-            LC.TableViewColumn {
-                role: "addr"
-                title: qsTranslate("RESP","Client Address")
-                width: 200
-            }
-
-            LC.TableViewColumn {
-                role: "age"
-                title: qsTranslate("RESP","Age (sec)")
-                width: 75
-            }
-
-            LC.TableViewColumn {
-                role: "idle"
-                title: qsTranslate("RESP","Idle")
-                width: 75
-            }
-
-            LC.TableViewColumn {
-                role: "flags"
-                title: qsTranslate("RESP","Flags")
-                width: 75
-            }
-
-            LC.TableViewColumn {
-                role: "db"
-                title: qsTranslate("RESP","Current Database")
-                width: 120
-            }
+            columns: [
+                {role: "addr", title: qsTranslate("RESP","Client Address"), width: 200},
+                {role: "age", title: qsTranslate("RESP","Age (sec)"), width: 75},
+                {role: "idle", title: qsTranslate("RESP","Idle"), width: 75},
+                {role: "flags", title: qsTranslate("RESP","Flags"), width: 75},
+                {role: "db", title: qsTranslate("RESP","Current Database"), width: 120}
+            ]
         }
     }
 }
