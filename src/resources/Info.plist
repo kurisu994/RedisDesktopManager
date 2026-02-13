@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>resp.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>app.resp.resp</string>
+	<string>com.redisdesktop.rdm</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
