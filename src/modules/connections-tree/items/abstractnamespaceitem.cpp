@@ -23,7 +23,10 @@ AbstractNamespaceItem::AbstractNamespaceItem(
       m_operations(operations),
       m_filter(filter.pattern().isEmpty()
                    ? QRegularExpression(QRegularExpression::wildcardToRegularExpression(operations->defaultFilter()))
-                   : filter),      
+                   : filter),
+      m_filterDisplayPattern(filter.pattern().isEmpty()
+                   ? operations->defaultFilter()
+                   : filter.pattern()),
       m_dbIndex(dbIndex),
       m_runningOperation(nullptr) {
   QSettings settings;

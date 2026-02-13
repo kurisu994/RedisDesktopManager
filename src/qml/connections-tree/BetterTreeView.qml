@@ -57,14 +57,16 @@ TreeView {
 
             Item { width: delegateRoot.depth * 12; height: 1 }
 
-            Image {
+            // 展开/折叠箭头（使用文本替代缺失的图标）
+            Text {
                 width: 14; height: 14
                 anchors.verticalCenter: parent.verticalCenter
                 visible: delegateRoot.isTreeNode && delegateRoot.hasChildren
-                source: delegateRoot.expanded
-                    ? PlatformUtils.getThemeIcon("expand.svg")
-                    : PlatformUtils.getThemeIcon("collapse.svg")
-                sourceSize: Qt.size(14, 14)
+                text: delegateRoot.expanded ? "▼" : "▶"
+                font.pixelSize: 10
+                color: sysPalette.text
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
 
                 TapHandler {
                     onTapped: root.toggleExpanded(delegateRoot.row)
@@ -104,6 +106,8 @@ TreeView {
     onExpanded: function(row, depth) {
         var idx = root.index(row, 0)
         connectionsManager.setExpanded(idx)
+        // 触发 click 事件加载子节点数据
+        connectionsManager.sendEvent(idx, "click")
     }
 
     onCollapsed: function(row, depth) {

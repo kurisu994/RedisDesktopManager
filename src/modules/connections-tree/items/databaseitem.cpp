@@ -32,9 +32,9 @@ QByteArray DatabaseItem::getName() const { return QByteArray(); }
 QByteArray DatabaseItem::getFullPath() const { return QByteArray(); }
 
 QString DatabaseItem::getDisplayName() const {
-  QString filter = m_filter.pattern() == "*"
+  QString filter = m_filterDisplayPattern == "*"
                        ? ""
-                       : QString("[filter: %1]").arg(m_filter.pattern());
+                       : QString("[filter: %1]").arg(m_filterDisplayPattern);
 
   QString baseString = QString("db%1").arg(m_dbIndex);
 
@@ -138,7 +138,9 @@ void DatabaseItem::setMetadata(const QString& key, QVariant value) {
       return;
 
     auto applyFilter = [this, value]() {
-      QRegularExpression pattern(QRegularExpression::wildcardToRegularExpression(value.toString()));
+      QString wildcardStr = value.toString();
+      QRegularExpression pattern(QRegularExpression::wildcardToRegularExpression(wildcardStr));
+      m_filterDisplayPattern = wildcardStr;
       filterKeys(pattern);
     };
 
@@ -267,7 +269,9 @@ void DatabaseItem::filterKeys(const QRegularExpression& filter) {
 }
 
 void DatabaseItem::resetFilter() {
-  m_filter = QRegularExpression(QRegularExpression::wildcardToRegularExpression(m_operations->defaultFilter()));
+  QString defaultFilterStr = m_operations->defaultFilter();
+  m_filterDisplayPattern = defaultFilterStr;
+  m_filter = QRegularExpression(QRegularExpression::wildcardToRegularExpression(defaultFilterStr));
   emit m_model.itemChanged(getSelf());
   reload();
 }

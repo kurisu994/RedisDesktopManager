@@ -110,7 +110,8 @@ class AbstractNamespaceItem : public QObject, public TreeItem, public MemoryUsag
   QList<QSharedPointer<TreeItem>> m_childItems;
   QHash<QByteArray, QSharedPointer<AbstractNamespaceItem>> m_childNamespaces;
   QList<QByteArray> m_rawChildKeys;
-  QRegularExpression m_filter;  
+  QRegularExpression m_filter;
+  QString m_filterDisplayPattern;  // 原始通配符 pattern（用于显示）
   uint m_dbIndex;
   QSharedPointer<AsyncFuture::Deferred<qlonglong>> m_runningOperation;
   bool m_showNsOnTop;  
