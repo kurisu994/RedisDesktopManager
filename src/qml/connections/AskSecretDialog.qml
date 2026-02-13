@@ -1,14 +1,14 @@
-import QtQuick 2.3
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.13
-import QtQuick.Dialogs 1.3
-import QtQuick.Window 2.3
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Dialogs
+import QtQuick.Window
 import "./../common"
 
 Dialog {
     id: root
 
-    modality: Qt.ApplicationModal
+    modal: true
     title: qsTranslate("RESP","Enter " + getSecretName()  + " to connect to ") + config.name
 
     property string secretId: ""

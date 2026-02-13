@@ -1,4 +1,4 @@
-import QtQuick.Controls 2.2
+import QtQuick.Controls
 
 BetterLabel {
     font.pixelSize: 15

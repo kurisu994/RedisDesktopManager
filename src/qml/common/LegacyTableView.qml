@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.4 as LC
+import QtQuick
+import QtQuick.Controls as LC
 import "./platformutils.js" as PlatformUtils
 
 LC.TableView {

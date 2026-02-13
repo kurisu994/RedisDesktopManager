@@ -158,7 +158,7 @@ package_macos() {
 
     # 部署 Qt 框架
     log_info "部署 Qt 框架..."
-    macdeployqt "$APP_BUNDLE"
+    macdeployqt "$APP_BUNDLE" -qmldir=src/qml
 
     # 更新 Info.plist（需在代码签名之前完成）
     if [ -f "src/resources/Info.plist.sample" ]; then

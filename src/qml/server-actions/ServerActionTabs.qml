@@ -1,9 +1,9 @@
-import QtQuick 2.3
-import QtQuick.Layouts 1.13
-import QtQuick.Controls 2.13
-import QtQuick.Controls 1.4 as LC
-import QtQuick.Window 2.2
-import QtCharts 2.3
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Controls as LC
+import QtQuick.Window
+import QtCharts
 import "./../common"
 import "./../common/platformutils.js" as PlatformUtils
 import "./../settings"

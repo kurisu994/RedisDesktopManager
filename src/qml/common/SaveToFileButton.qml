@@ -1,7 +1,7 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.13
+import QtQuick
+import QtQuick.Controls
 import Qt.labs.platform 1.1
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts
 import "./platformutils.js" as PlatformUtils
 
 ImageButton {

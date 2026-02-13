@@ -165,7 +165,7 @@ build_macos() {
         log_warning "macdeployqt 未找到，请手动部署 Qt 框架"
     else
         log_info "部署 Qt 框架..."
-        macdeployqt "../bin/osx/release/RESP.app"
+        macdeployqt "../bin/osx/release/RESP.app" -qmldir=qml
 
         # 复制额外的库文件
         if [ -d "lib" ]; then

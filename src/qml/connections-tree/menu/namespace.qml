@@ -1,6 +1,6 @@
-import QtQuick 2.3
-import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.4
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 import "."
 import "./../../common/platformutils.js" as PlatformUtils
 

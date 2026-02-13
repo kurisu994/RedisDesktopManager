@@ -1,9 +1,8 @@
-import QtQuick 2.14
-import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.4
-import QtQuick.Controls.Styles 1.4
-import QtQml.Models 2.2
-import QtQuick.Window 2.2
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQml.Models
+import QtQuick.Window
 import "./../common/platformutils.js" as PlatformUtils
 import "./../common"
 

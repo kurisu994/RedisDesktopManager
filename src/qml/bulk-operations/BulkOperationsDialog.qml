@@ -1,7 +1,7 @@
-import QtQuick 2.3
-import QtQuick.Layouts 1.1
-import QtQuick.Controls 2.13
-import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Dialogs
 import "./../common/"
 import "../common/platformutils.js" as PlatformUtils
 
@@ -15,7 +15,7 @@ BetterDialog {
 
     property int firstColSize: PlatformUtils.isScalingDisabled()? 300 : 250
 
-    standardButtons: StandardButton.NoButton
+    standardButtons: Dialog.NoButton
 
     function loadKeys() {
         bulkOperations.getAffectedKeys()
@@ -437,7 +437,7 @@ BetterDialog {
             Loader {
                 id: bulkErrorNotification
 
-                property var icon: StandardIcon.Warning
+                property var icon: "warning"
                 property string title
                 property string text
                 property string detailedText
@@ -446,7 +446,7 @@ BetterDialog {
                     id: bulkNotificationTemplate
 
                     OkDialog {
-                        modality: Qt.NonModal
+                        modal: false
                         title: bulkErrorNotification.title
                         icon: bulkErrorNotification.icon
                         text: bulkErrorNotification.text

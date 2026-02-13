@@ -1,11 +1,10 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Styles 1.1
-import QtQml.Models 2.2
-import QtQuick.Window 2.2
-import Qt.labs.settings 1.0
-import QtQuick.Dialogs 1.3 as LegacyDialogs
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQml.Models
+import QtQuick.Window
+import QtCore
+import QtQuick.Dialogs
 import "."
 import "./common"
 import "./common/platformutils.js" as PlatformUtils
@@ -166,14 +165,14 @@ ApplicationWindow {
         property string details
 
         function showError(msg, details="") {
-            icon = LegacyDialogs.StandardIcon.Warning
+            icon = "warning"
             text = msg
             notification.details = details
             sourceComponent = notificationTemplate
         }
 
         function showMsg(msg) {
-            icon = LegacyDialogs.StandardIcon.Information
+            icon = "information"
             text = msg
             details = ""
             sourceComponent = notificationTemplate

@@ -1,10 +1,10 @@
-import QtQuick 2.15
-import QtQuick.Layouts 1.13
-import QtQuick.Controls 2.13
-import QtQuick.Controls 1.4 as LC
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Controls as LC
 import Qt.labs.qmlmodels 1.0
-import QtQuick.Window 2.2
-import QtCharts 2.3
+import QtQuick.Window
+import QtCharts
 import "./../common"
 import "./../common/platformutils.js" as PlatformUtils
 import "./../settings"

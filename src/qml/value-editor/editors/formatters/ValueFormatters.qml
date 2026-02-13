@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQml.Models 2.13
+import QtQuick
+import QtQml.Models
 import "./hexy.js" as Hexy
 import "../../../common/platformutils.js" as PlatformUtils
 
