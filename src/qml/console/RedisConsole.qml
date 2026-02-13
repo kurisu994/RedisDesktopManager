@@ -67,7 +67,6 @@ Rectangle {
         color: "yellow"
         readOnly: root.promptLength == 0 || blockAllInput
         textFormat: TextEdit.RichText
-        menu: null
 
         property bool blockAllInput: false
         property int commandStartPos: root.promptPosition + root.promptLength

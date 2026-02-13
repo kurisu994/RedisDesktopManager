@@ -189,7 +189,7 @@ Item {
                         model: searchModel ? searchModel : null
 
                         // Proxy model row index from 0 to maxItemsOnPage
-                        property int currentRow: -1
+                        property int selectedRow: -1
                         property var searchField
                         property var currentStart: 0
                         property int maxItemsOnPage: keyTab.keyModel ? keyTab.keyModel.pageSize : 100
@@ -202,18 +202,18 @@ Item {
                         property var valueColumnWidthOverrides: QtObject {}
 
                         Keys.onUpPressed: {
-                            if (currentRow > 0) {
-                                currentRow--;
+                            if (selectedRow > 0) {
+                                selectedRow--;
                             } else {
-                                currentRow = 0;
+                                selectedRow = 0;
                             }
                         }
 
                         Keys.onDownPressed: {
-                            if (currentRow < rows - 1) {
-                                currentRow++;
+                            if (selectedRow < rows - 1) {
+                                selectedRow++;
                             } else {
-                                currentRow = rows - 1;
+                                selectedRow = rows - 1;
                             }
                         }
 
@@ -281,9 +281,9 @@ Item {
                                     implicitWidth: table.firstColumnWidth
                                     implicitHeight: 30
                                     text: Number(rowNumber) + 1
-                                    selected: table.currentRow === row
+                                    selected: table.selectedRow === row
                                     onClicked: {
-                                        table.currentRow = row
+                                        table.selectedRow = row
                                         table.forceActiveFocus()
                                     }
                                 }
@@ -297,9 +297,9 @@ Item {
                                     implicitWidth: table.valueColumnWidth
                                     implicitHeight: 30
                                     text: renderText(display)
-                                    selected: table.currentRow === row
+                                    selected: table.selectedRow === row
                                     onClicked: {
-                                         table.currentRow = row
+                                         table.selectedRow = row
                                         table.forceActiveFocus()
                                     }
                                 }
@@ -313,9 +313,9 @@ Item {
                                     implicitWidth: table.valueColumnWidth
                                     implicitHeight: 30
 
-                                    selected: table.currentRow === row
+                                    selected: table.selectedRow === row
                                     onClicked: {
-                                        table.currentRow = row
+                                        table.selectedRow = row
                                         table.forceActiveFocus()
                                     }
 
@@ -425,7 +425,7 @@ Item {
                         }
 
                         function resetCurrentRow() {
-                            table.currentRow = -1
+                            table.selectedRow = -1
                         }
 
                         function sort(role, order) {
@@ -434,10 +434,10 @@ Item {
                         }
 
                         onRowsChanged: wrapper.hideLoader()
-                        onCurrentRowChanged: {
-                            console.log("Current row in table changed: ", currentRow)
-                            if (currentRow >= 0) {
-                                valueEditor.loadRowValue(currentStart + table.model.getOriginalRowIndex(currentRow))
+                        onSelectedRowChanged: {
+                            console.log("Current row in table changed: ", selectedRow)
+                            if (selectedRow >= 0) {
+                                valueEditor.loadRowValue(currentStart + table.model.getOriginalRowIndex(selectedRow))
                             }
                         }
                     }

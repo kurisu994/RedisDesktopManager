@@ -17,14 +17,14 @@ BetterButton {
     MouseArea {
             id: mouseArea
             anchors.fill: parent
-            onPressed: mouse.accepted = false
+            onPressed: function(event) { event.accepted = false }
             cursorShape: Qt.PointingHandCursor
     }
 
     Image {
         id: img
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: root.text || root.imgStickTop ? null : parent.verticalCenter
+        anchors.verticalCenter: (root.text || root.imgStickTop) ? undefined : parent.verticalCenter
         source: PlatformUtils.getThemeIcon("clear.svg")
         width: 18
         height: 18

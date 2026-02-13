@@ -24,7 +24,7 @@ Button {
     MouseArea {
             id: mouseArea
             anchors.fill: parent
-            onPressed: mouse.accepted = false
+            onPressed: function(event) { event.accepted = false }
             cursorShape: Qt.PointingHandCursor
     }
 

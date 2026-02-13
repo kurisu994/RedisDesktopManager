@@ -10,7 +10,7 @@ CCACHE_BIN = $$system(which ccache)
   CONFIG+=ccache
 }
 
-QT += core gui network concurrent widgets quick quickwidgets charts svg
+QT += core gui network concurrent widgets quick quickwidgets quickcontrols2 charts svg
 
 TARGET = resp
 TEMPLATE = app

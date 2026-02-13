@@ -90,7 +90,7 @@ FocusScope {
             }
         }
 
-        onClicked: {
+        onClicked: function(mouse) {
             console.log("Catch event to item")
 
             if (mouse.button === Qt.RightButton) {

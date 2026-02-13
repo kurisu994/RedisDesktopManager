@@ -7,6 +7,7 @@
 #include <QNetworkProxyFactory>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QQuickStyle>
 #include <QSettings>
 #include <QSysInfo>
 #include <QUrl>
@@ -306,6 +307,9 @@ void Application::registerQmlRootObjects() {
 }
 
 void Application::initQml() {
+  // 使用 Fusion 样式以支持控件自定义（macOS native style 不允许）
+  QQuickStyle::setStyle("Fusion");
+
   if (m_renderingBackend == "auto") {
     QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
   } else if (m_renderingBackend == "software") {
