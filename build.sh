@@ -12,7 +12,7 @@ if [ -z "$VERSION" ]; then
     if [ -n "$2" ]; then
         VERSION="$2"
     else
-        VERSION="2024.1.0-dev"
+        VERSION="2026.2.0"
     fi
 fi
 
@@ -172,6 +172,10 @@ build_macos() {
             mkdir -p "../bin/osx/release/RESP.app/Contents/Frameworks"
             cp -r lib/* "../bin/osx/release/RESP.app/Contents/Frameworks/"
         fi
+
+        # Ad-hoc 代码签名
+        log_info "对应用程序进行代码签名..."
+        codesign --force --deep --sign - "../bin/osx/release/RESP.app"
     fi
 
     cd ..

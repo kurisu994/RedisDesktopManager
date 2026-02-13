@@ -16,7 +16,7 @@ TARGET = resp
 TEMPLATE = app
 
 !defined(VERSION, var) {
-    VERSION=2022.0.0-dev
+    VERSION=2026.2.0
 }
 
 message($$VERSION)

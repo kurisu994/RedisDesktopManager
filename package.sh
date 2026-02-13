@@ -12,7 +12,7 @@ if [ -z "$VERSION" ]; then
     if [ -n "$2" ]; then
         VERSION="$2"
     else
-        VERSION="2024.1.0-dev"
+        VERSION="2026.2.0"
     fi
 fi
 
@@ -160,12 +160,25 @@ package_macos() {
     log_info "部署 Qt 框架..."
     macdeployqt "$APP_BUNDLE"
 
-    # 更新 Info.plist
+    # 更新 Info.plist（需在代码签名之前完成）
     if [ -f "src/resources/Info.plist.sample" ]; then
         log_info "更新 Info.plist..."
         cp "src/resources/Info.plist.sample" "$APP_BUNDLE/Contents/Info.plist"
         sed -i '' "s/0.0.0/$VERSION/g" "$APP_BUNDLE/Contents/Info.plist"
     fi
+
+    # Ad-hoc 代码签名（macdeployqt 修改二进制后需要重新签名）
+    log_info "对应用程序进行代码签名..."
+    # 先签名所有 Frameworks 和插件
+    find "$APP_BUNDLE/Contents/Frameworks" -name "*.dylib" -o -name "*.framework" -type d | while read -r item; do
+        codesign --force --sign - "$item" 2>/dev/null || true
+    done
+    find "$APP_BUNDLE/Contents/PlugIns" -name "*.dylib" | while read -r item; do
+        codesign --force --sign - "$item" 2>/dev/null || true
+    done
+    # 最后签名整个 app bundle
+    codesign --force --deep --sign - "$APP_BUNDLE"
+    log_success "代码签名完成"
 
     # 创建临时 DMG 目录
     DMG_TEMP="dmg_temp"
