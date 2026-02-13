@@ -1,5 +1,6 @@
 #include "largetextmodel.h"
 #include <QDebug>
+#include <QRegularExpression>
 
 ValueEditor::LargeTextWrappingModel::LargeTextWrappingModel(const QString &text,
                                                             uint chunkSize)
@@ -88,9 +89,10 @@ QVariantList ValueEditor::LargeTextWrappingModel::searchText(QString p, int from
     int length = 0;
 
     if (regex) {
-        auto rx = QRegExp(p);
-        res = text.indexOf(rx, from);
-        length = rx.matchedLength();
+        auto rx = QRegularExpression(p);
+        auto match = rx.match(text, from);
+        res = match.hasMatch() ? match.capturedStart() : -1;
+        length = match.hasMatch() ? match.capturedLength() : 0;
     } else {
         res = text.indexOf(p, from, Qt::CaseInsensitive);
         length = p.size();

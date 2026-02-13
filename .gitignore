@@ -20,6 +20,7 @@ _ReSharper*/
 *.opensdf
 */GeneratedFiles/*
 build-redis*
+package/*
 
 .vagrant/*
 redis-desktop-manager/Makefile*

@@ -15,7 +15,7 @@ class NamespaceItem : public AbstractNamespaceItem {
   NamespaceItem(const QByteArray& fullPath,
                 QSharedPointer<Operations> operations,
                 QWeakPointer<TreeItem> parent, Model& model, uint dbIndex,
-                QRegExp filter);
+                QRegularExpression filter);
 
   QString getDisplayName() const override;
 

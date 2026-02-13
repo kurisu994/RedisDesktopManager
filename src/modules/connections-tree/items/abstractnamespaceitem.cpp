@@ -17,12 +17,13 @@ using namespace ConnectionsTree;
 
 AbstractNamespaceItem::AbstractNamespaceItem(
     Model &model, QWeakPointer<TreeItem> parent,
-    QSharedPointer<Operations> operations, uint dbIndex, QRegExp filter)
+    QSharedPointer<Operations> operations, uint dbIndex, QRegularExpression filter)
     : TreeItem(model),
       m_parent(parent),
       m_operations(operations),
-      m_filter(filter.isEmpty() ? QRegExp(operations->defaultFilter())
-                                : filter),      
+      m_filter(filter.pattern().isEmpty()
+                   ? QRegularExpression(QRegularExpression::wildcardToRegularExpression(operations->defaultFilter()))
+                   : filter),      
       m_dbIndex(dbIndex),
       m_runningOperation(nullptr) {
   QSettings settings;
@@ -302,7 +303,7 @@ void AbstractNamespaceItem::sortChilds() {
 }
 
 void AbstractNamespaceItem::renderRawKeys(
-    const RedisClient::Connection::RawKeysList &keylist, QRegExp filter,
+    const RedisClient::Connection::RawKeysList &keylist, QRegularExpression filter,
     QSharedPointer<RenderRawKeysCallback> callback, bool appendNewItems,
     bool checkPreRenderedItems, int maxChildItems) {
   if (!m_operations) {
@@ -408,8 +409,9 @@ void AbstractNamespaceItem::getMemoryUsage(
   m_runningOperation = QSharedPointer<AsyncFuture::Deferred<qlonglong>>(
       new AsyncFuture::Deferred<qlonglong>());
 
-  QtConcurrent::run(this, &AbstractNamespaceItem::calculateUsedMemory,
-                    m_runningOperation, callback);
+  QtConcurrent::run([this, op = m_runningOperation, callback]() {
+                      calculateUsedMemory(op, callback);
+                    });
 
   return;
 }

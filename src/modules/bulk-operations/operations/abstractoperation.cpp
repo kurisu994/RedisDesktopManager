@@ -3,7 +3,7 @@
 
 BulkOperations::AbstractOperation::AbstractOperation(
     QSharedPointer<RedisClient::Connection> connection, int dbIndex,
-    OperationCallback callback, QRegExp keyPattern)
+    OperationCallback callback, QRegularExpression keyPattern)
     : m_connection(connection),
       m_dbIndex(dbIndex),
       m_keyPattern(keyPattern),
@@ -79,11 +79,11 @@ BulkOperations::AbstractOperation::getConnection() {
 
 int BulkOperations::AbstractOperation::getDbIndex() const { return m_dbIndex; }
 
-QRegExp BulkOperations::AbstractOperation::getKeyPattern() const {
+QRegularExpression BulkOperations::AbstractOperation::getKeyPattern() const {
   return m_keyPattern;
 }
 
-void BulkOperations::AbstractOperation::setKeyPattern(const QRegExp p) {
+void BulkOperations::AbstractOperation::setKeyPattern(const QRegularExpression p) {
   m_keyPattern = p;
 }
 

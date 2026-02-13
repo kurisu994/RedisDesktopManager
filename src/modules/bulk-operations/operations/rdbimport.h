@@ -1,7 +1,7 @@
 #pragma once
 #include <asyncfuture.h>
 #include <QObject>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSharedPointer>
 #include "abstractoperation.h"
 
@@ -15,8 +15,7 @@ class RDBImportOperation : public AbstractOperation {
   RDBImportOperation(QSharedPointer<RedisClient::Connection> connection,
                      int dbIndex, OperationCallback callback,
                      QSharedPointer<QPython> p,
-                     QRegExp keyPattern = QRegExp("*", Qt::CaseSensitive,
-                                                  QRegExp::Wildcard));
+                     QRegularExpression keyPattern = wildcardToRegex("*"));
 
   QString getTypeName() const override { return QString("rdb_import"); }
 

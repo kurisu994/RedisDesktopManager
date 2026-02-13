@@ -70,10 +70,11 @@ void KeysTreeRenderer::renderKeys(QSharedPointer<Operations> operations,
 
   auto isBulkInsert = [settings, preRenderedKeysSet, unprocessedPartStart](
                           const QByteArray &current, const QByteArray &next) {
+    QByteArray sep = settings.nsSeparator.toUtf8();
     return (settings.appendNewItems &&
-            current.indexOf(settings.nsSeparator, unprocessedPartStart) == -1 &&
+            current.indexOf(sep, unprocessedPartStart) == -1 &&
             !next.isEmpty() &&
-            next.indexOf(settings.nsSeparator, unprocessedPartStart) == -1 &&
+            next.indexOf(sep, unprocessedPartStart) == -1 &&
             !preRenderedKeysSet.contains(next));
   };
 
@@ -98,8 +99,8 @@ void KeysTreeRenderer::renderKeys(QSharedPointer<Operations> operations,
         continue;
     } else if (bulkInsertItems.size() > 0 && parent) {
       int itemsAboutToBeInserted =
-          qMin(static_cast<uint>(bulkInsertItems.size()),
-               settings.renderLimit - parent->getAllChilds().size());
+          qMin(static_cast<int>(bulkInsertItems.size()),
+               static_cast<int>(settings.renderLimit) - static_cast<int>(parent->getAllChilds().size()));
 
       qDebug() << "Bulk insert" << itemsAboutToBeInserted;
 
@@ -168,7 +169,7 @@ void KeysTreeRenderer::renderLazily(QSharedPointer<AbstractNamespaceItem> root,
   int indexOfNaspaceSeparator =
       (settings.nsSeparator.isEmpty())
           ? -1
-          : notProcessedKeyPart.indexOf(settings.nsSeparator);
+          : notProcessedKeyPart.indexOf(settings.nsSeparator.toUtf8());
 
   if (indexOfNaspaceSeparator == -1) {
     if (parent->getAllChilds().size() >= settings.renderLimit) {

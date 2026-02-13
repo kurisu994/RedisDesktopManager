@@ -1,7 +1,7 @@
 #pragma once
 #include <qredisclient/response.h>
 #include <QObject>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSharedPointer>
 #include <QString>
 #include <QStringList>
@@ -76,7 +76,7 @@ class Manager : public QObject {
 
  public slots:
   void requestBulkOperation(QSharedPointer<RedisClient::Connection> connection,
-                            int dbIndex, Operation op, QRegExp keyPattern,
+                            int dbIndex, Operation op, QRegularExpression keyPattern,
                             AbstractOperation::OperationCallback callback);
 
  private:

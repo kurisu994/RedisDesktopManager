@@ -4,7 +4,7 @@
 
 BulkOperations::TtlOperation::TtlOperation(
     QSharedPointer<RedisClient::Connection> connection, int dbIndex,
-    OperationCallback callback, QRegExp keyPattern)
+    OperationCallback callback, QRegularExpression keyPattern)
     : BulkOperations::AbstractOperation(connection, dbIndex, callback,
                                         keyPattern) {
   m_errorMessagePrefix =
@@ -26,16 +26,18 @@ void BulkOperations::TtlOperation::performOperation(
 
   QByteArray ttl = m_metadata["ttl"].toString().toUtf8();
 
-  QtConcurrent::run(this, &TtlOperation::setTtl, m_affectedKeys, ttl,
-                    [this, ttl, returnResults]() {
-                      // Retry on keys with errors
-                      if (m_keysWithErrors.size() > 0) {
-                        m_errors.clear();
-                        setTtl(m_keysWithErrors, ttl,
-                               returnResults);
-                      } else {
-                        returnResults();
-                      }
+  QtConcurrent::run([this, ttl, returnResults, keys = m_affectedKeys]() {
+                      setTtl(keys, ttl,
+                     [this, ttl, returnResults]() {
+                       // Retry on keys with errors
+                       if (m_keysWithErrors.size() > 0) {
+                         m_errors.clear();
+                         setTtl(m_keysWithErrors, ttl,
+                                returnResults);
+                       } else {
+                         returnResults();
+                       }
+                     });
                     });
 }
 

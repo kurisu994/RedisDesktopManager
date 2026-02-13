@@ -116,7 +116,7 @@ build_windows() {
 
     # 配置 qmake 项目
     log_info "配置 qmake 项目..."
-    qmake "CONFIG+=release" "DEFINES+=APP_VERSION=\\\"$VERSION\\\"" \
+    qmake "CONFIG+=release" "CONFIG-=debug" "DEFINES+=APP_VERSION=\\\"$VERSION\\\"" \
            "SYSTEM_LZ4=1" "SYSTEM_ZSTD=1" "SYSTEM_SNAPPY=1" "SYSTEM_BROTLI=1"
 
     # 编译
@@ -147,7 +147,7 @@ build_macos() {
 
     # 配置 qmake 项目
     log_info "配置 qmake 项目..."
-    qmake "CONFIG+=release" "DEFINES+=APP_VERSION=\\\"$VERSION\\\"" \
+    qmake "CONFIG+=release" "CONFIG-=debug" "DEFINES+=APP_VERSION=\\\"$VERSION\\\"" \
            "SYSTEM_LZ4=1" "SYSTEM_ZSTD=1" "SYSTEM_SNAPPY=1" "SYSTEM_BROTLI=1"
 
     # 编译
@@ -188,7 +188,7 @@ build_linux() {
 
     # 配置 qmake 项目
     log_info "配置 qmake 项目..."
-    qmake "CONFIG+=release" "DEFINES+=APP_VERSION=\\\"$VERSION\\\"" \
+    qmake "CONFIG+=release" "CONFIG-=debug" "DEFINES+=APP_VERSION=\\\"$VERSION\\\"" \
            "SYSTEM_LZ4=1" "SYSTEM_ZSTD=1" "SYSTEM_SNAPPY=1" "SYSTEM_BROTLI=1" \
            "CLEAN_RPATH=1"
 

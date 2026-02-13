@@ -66,9 +66,31 @@ win32* {
 }
 
 unix:macx { # OSX
-    LIBS += -lz $$LZ4DIR/build/cmake/liblz4.a $$ZSTDDIR/build/cmake/lib/libzstd.a
-    LIBS += $$SNAPPYDIR/libsnappy.a
-    LIBS += -L$$BROTLIDIR/ -lbrotlicommon-static -lbrotlidec-static -lbrotlienc-static
+    LIBS += -L/opt/homebrew/lib -lz
+
+    defined(SYSTEM_LZ4, var) {
+        LIBS += -llz4
+    } else {
+        LIBS += $$LZ4DIR/build/cmake/liblz4.a
+    }
+
+    defined(SYSTEM_ZSTD, var) {
+        LIBS += -lzstd
+    } else {
+        LIBS += $$ZSTDDIR/build/cmake/lib/libzstd.a
+    }
+
+    defined(SYSTEM_SNAPPY, var) {
+        LIBS += -lsnappy
+    } else {
+        LIBS += $$SNAPPYDIR/libsnappy.a
+    }
+
+    defined(SYSTEM_BROTLI, var) {
+        LIBS += -lbrotlicommon -lbrotlidec -lbrotlienc
+    } else {
+        LIBS += -L$$BROTLIDIR/ -lbrotlicommon-static -lbrotlidec-static -lbrotlienc-static
+    }
 }
 
 unix:!macx { # ubuntu & debian   

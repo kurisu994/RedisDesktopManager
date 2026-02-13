@@ -40,7 +40,7 @@ public:
 
     Q_INVOKABLE void copyToClipboard(const QString &text);
     Q_INVOKABLE bool saveToFile(const QVariant &value, const QString &path);
-    Q_INVOKABLE void addNewValueToDynamicChart(QtCharts::QXYSeries* series, qreal value);
+    Q_INVOKABLE void addNewValueToDynamicChart(QXYSeries* series, qreal value);
     Q_INVOKABLE QObject* wrapLargeText(const QByteArray &text);
     Q_INVOKABLE void deleteTextWrapper(QObject* w);
     Q_INVOKABLE QString escapeHtmlEntities(const QString& t);

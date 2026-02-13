@@ -107,7 +107,7 @@ QString BulkOperations::Manager::keyPattern() const {
 void BulkOperations::Manager::setKeyPattern(const QString& p) {
   if (!hasOperation()) return;
 
-  m_operation->setKeyPattern(QRegExp(p, Qt::CaseSensitive, QRegExp::Wildcard));
+  m_operation->setKeyPattern(BulkOperations::wildcardToRegex(p));
 }
 
 int BulkOperations::Manager::operationProgress() const {
@@ -118,14 +118,14 @@ int BulkOperations::Manager::operationProgress() const {
 
 void BulkOperations::Manager::requestBulkOperation(
     QSharedPointer<RedisClient::Connection> connection, int dbIndex,
-    BulkOperations::Manager::Operation op, QRegExp keyPattern,
+    BulkOperations::Manager::Operation op, QRegularExpression keyPattern,
     AbstractOperation::OperationCallback callback) {
   if (hasOperation()) {
     qWarning() << "BulkOperationsManager already has bulk operation request";
     return;
   }
 
-  auto callbackWrapper = [this, callback](QRegExp filter, long processed,
+  auto callbackWrapper = [this, callback](QRegularExpression filter, long processed,
                                           const QStringList& e) {
     if (e.size() > 0) {
       emit error(QCoreApplication::translate(

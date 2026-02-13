@@ -119,7 +119,7 @@ void ValueEditor::TabsModel::openTab(
 
 void ValueEditor::TabsModel::closeDbKeys(
     QSharedPointer<RedisClient::Connection> connection, int dbIndex,
-    const QRegExp& filter) {
+    const QRegularExpression& filter) {
   for (int index = 0; 0 <= index && index < m_viewModels.size(); index++) {
     auto model = m_viewModels.at(index)->model();
 

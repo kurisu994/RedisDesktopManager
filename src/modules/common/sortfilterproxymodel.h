@@ -62,4 +62,5 @@ private:
     bool m_complete;
     QByteArray m_sortRole;
     QByteArray m_filterRole;
+    FilterSyntax m_filterSyntax = RegExp;
 };

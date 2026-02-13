@@ -56,7 +56,7 @@ void DatabaseItem::loadKeys(std::function<void()> callback,
                             bool partialReload) {
   lock();
 
-  QString filter = (m_filter.isEmpty()) ? "" : m_filter.pattern();
+  QString filter = (m_filter.pattern().isEmpty()) ? "" : m_filter.pattern();
 
   auto self = getSelf().toStrongRef();
 
@@ -132,14 +132,13 @@ void DatabaseItem::setMetadata(const QString& key, QVariant value) {
                        value.toString().isEmpty());
 
   if (key == "filter") {
-    if (!m_filter.isEmpty() && isResetValue)
+    if (!m_filter.pattern().isEmpty() && isResetValue)
       return resetFilter();
     else if (isResetValue)
       return;
 
     auto applyFilter = [this, value]() {
-      QRegExp pattern(value.toString(), Qt::CaseSensitive,
-                      QRegExp::PatternSyntax::WildcardUnix);
+      QRegularExpression pattern(QRegularExpression::wildcardToRegularExpression(value.toString()));
       filterKeys(pattern);
     };
 
@@ -261,14 +260,14 @@ void DatabaseItem::performLiveUpdate() {
       true);
 }
 
-void DatabaseItem::filterKeys(const QRegExp& filter) {
+void DatabaseItem::filterKeys(const QRegularExpression& filter) {
   m_filter = filter;
   emit m_model.itemChanged(getSelf());
   reload();
 }
 
 void DatabaseItem::resetFilter() {
-  m_filter = QRegExp(m_operations->defaultFilter());
+  m_filter = QRegularExpression(QRegularExpression::wildcardToRegularExpression(m_operations->defaultFilter()));
   emit m_model.itemChanged(getSelf());
   reload();
 }

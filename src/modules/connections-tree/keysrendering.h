@@ -1,5 +1,5 @@
 #pragma once
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QSharedPointer>
 #include <QtConcurrent>
@@ -17,7 +17,7 @@ namespace ConnectionsTree {
     {
     public:
         struct RenderingSettigns {
-            QRegExp filter;
+            QRegularExpression filter;
             QString nsSeparator;
             uint dbIndex;            
             uint renderLimit;            

@@ -4,7 +4,7 @@
 
 BulkOperations::DeleteOperation::DeleteOperation(
     QSharedPointer<RedisClient::Connection> connection, int dbIndex,
-    OperationCallback callback, QRegExp keyPattern)
+    OperationCallback callback, QRegularExpression keyPattern)
     : BulkOperations::AbstractOperation(connection, dbIndex, callback,
                                         keyPattern) {
   m_errorMessagePrefix =
@@ -33,16 +33,18 @@ void BulkOperations::DeleteOperation::performOperation(
           removalCmd = "UNLINK";
         }
 
-        QtConcurrent::run(this, &DeleteOperation::deleteKeys, m_affectedKeys,
-                          removalCmd, [this, removalCmd, returnResults]() {
-                            // Retry on keys with errors
-                            if (m_keysWithErrors.size() > 0) {
-                              m_errors.clear();
-                              deleteKeys(m_keysWithErrors,
-                                         removalCmd, returnResults);
-                            } else {
-                              returnResults();
-                            }
+        QtConcurrent::run([this, keys = m_affectedKeys, removalCmd, returnResults]() {
+                            deleteKeys(keys,
+                           removalCmd, [this, removalCmd, returnResults]() {
+                             // Retry on keys with errors
+                             if (m_keysWithErrors.size() > 0) {
+                               m_errors.clear();
+                               deleteKeys(m_keysWithErrors,
+                                          removalCmd, returnResults);
+                             } else {
+                               returnResults();
+                             }
+                           });
                           });
       });
 }

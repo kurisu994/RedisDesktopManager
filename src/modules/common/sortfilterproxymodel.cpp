@@ -58,23 +58,25 @@ void SortFilterProxyModel::setFilterRole(const QByteArray &role)
 
 QString SortFilterProxyModel::filterString() const
 {
-    return filterRegExp().pattern();
+    return filterRegularExpression().pattern();
 }
 
 void SortFilterProxyModel::setFilterString(const QString &filter)
 {
-    setFilterRegExp(QRegExp(filter, filterCaseSensitivity(), static_cast<QRegExp::PatternSyntax>(filterSyntax())));
+    setFilterRegularExpression(QRegularExpression(filter, static_cast<QRegularExpression::PatternOptions>(
+        filterSyntax() == Wildcard ? QRegularExpression::NoPatternOption : QRegularExpression::NoPatternOption)));
     emit filterStringChanged();
 }
 
 SortFilterProxyModel::FilterSyntax SortFilterProxyModel::filterSyntax() const
 {
-    return static_cast<FilterSyntax>(filterRegExp().patternSyntax());
+    return m_filterSyntax;
 }
 
 void SortFilterProxyModel::setFilterSyntax(SortFilterProxyModel::FilterSyntax syntax)
 {
-    setFilterRegExp(QRegExp(filterString(), filterCaseSensitivity(), static_cast<QRegExp::PatternSyntax>(syntax)));
+    m_filterSyntax = syntax;
+    setFilterString(filterString());
 }
 
 void SortFilterProxyModel::classBegin()

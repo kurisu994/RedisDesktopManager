@@ -8,7 +8,7 @@
 
 BulkOperations::RDBImportOperation::RDBImportOperation(
     QSharedPointer<RedisClient::Connection> connection, int dbIndex,
-    OperationCallback callback, QSharedPointer<QPython> p, QRegExp keyPattern)
+    OperationCallback callback, QSharedPointer<QPython> p, QRegularExpression keyPattern)
     : BulkOperations::AbstractOperation(connection, dbIndex, callback,
                                         keyPattern),
       m_python(p) {
@@ -20,7 +20,8 @@ BulkOperations::RDBImportOperation::RDBImportOperation(
 void BulkOperations::RDBImportOperation::getAffectedKeys(
     std::function<void(QVariant, QString)> callback) {
 
-  m_keyPattern.setPatternSyntax(QRegExp::RegExp2);
+  // 对于 RDB 导入，使用正则表达式模式（不是通配符）
+  // pattern() 已经是正则表达式字符串
 
   if (!m_keyPattern.isValid()) {
     return callback(QVariant(), QCoreApplication::translate(

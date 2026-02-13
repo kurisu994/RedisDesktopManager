@@ -20,7 +20,10 @@ win32* {
         QMAKE_BUNDLE_DATA += PY_DATA_FILES
 
       } else {
-       PYTHON_CONFIG = /usr/local/bin/python3-config
+       PYTHON_CONFIG = $$system(which python3-config)
+       isEmpty(PYTHON_CONFIG) {
+         PYTHON_CONFIG = python3-config
+       }
        QMAKE_LIBS += $$system($$PYTHON_CONFIG --ldflags --libs --embed)
        QMAKE_CXXFLAGS += $$system($$PYTHON_CONFIG --includes)
       }

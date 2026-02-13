@@ -36,7 +36,7 @@ class DatabaseItem : public AbstractNamespaceItem {
                 bool partialReload=false);
   void unload(bool notify = true);
   void performLiveUpdate();
-  void filterKeys(const QRegExp& filter);
+  void filterKeys(const QRegularExpression& filter);
   void resetFilter();
 
   QHash<QString, std::function<bool()>> eventHandlers() override;

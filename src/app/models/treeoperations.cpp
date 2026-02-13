@@ -2,7 +2,6 @@
 
 #include <asyncfuture.h>
 #include <qredisclient/redisclient.h>
-#include <QRegExp>
 #include <QRegularExpression>
 #include <QRegularExpressionMatchIterator>
 #include <QSet>
@@ -163,7 +162,7 @@ void TreeOperations::requestBulkOperation(
           .arg(QString::fromUtf8(ns.getFullPath()))
           .arg(ns.getFullPath().size() > 0 ? m_config.namespaceSeparator()
                                            : "");
-  QRegExp filter(pattern, Qt::CaseSensitive, QRegExp::Wildcard);
+  QRegularExpression filter(QRegularExpression::wildcardToRegularExpression(pattern));
 
   auto dbIndex = ns.getDbIndex();
 
@@ -194,9 +193,11 @@ QFuture<void> TreeOperations::getDatabases(
 
   getReadyConnection(
       [this, callback](QSharedPointer<RedisClient::Connection> c) {
-        QtConcurrent::run(this, &TreeOperations::loadDatabases, c, m_dbScanOp,
-                          [callback](RedisClient::DatabaseList dbs, const QString& err){
-            callback->call(dbs, err);
+        QtConcurrent::run([this, c, dbScanOp = m_dbScanOp, callback]() {
+                          loadDatabases(c, dbScanOp,
+                           [callback](RedisClient::DatabaseList dbs, const QString& err){
+              callback->call(dbs, err);
+          });
         });
       });
 
@@ -326,8 +327,7 @@ void TreeOperations::deleteDbKey(ConnectionsTree::KeyItem& key,
             {"DEL", key.getFullPath()}, this, key.getDbIndex(),
             [this, &key](RedisClient::Response) {
               key.setRemoved();
-              QRegExp filter(key.getFullPath(), Qt::CaseSensitive,
-                             QRegExp::Wildcard);
+              QRegularExpression filter(QRegularExpression::wildcardToRegularExpression(key.getFullPath()));
               if (m_events)
                 m_events->closeDbKeys(m_connection, key.getDbIndex(), filter);
             },
@@ -345,7 +345,7 @@ void TreeOperations::deleteDbKeys(ConnectionsTree::DatabaseItem& db) {
   auto self = sharedFromThis().toWeakRef();
   requestBulkOperation(
       db, BulkOperations::Manager::Operation::DELETE_KEYS,
-      [self, this, &db](QRegExp filter, int, const QStringList&) {
+      [self, this, &db](QRegularExpression filter, int, const QStringList&) {
         if (!self) {
           return;
         }
@@ -365,7 +365,7 @@ void TreeOperations::deleteDbNamespace(ConnectionsTree::NamespaceItem& ns) {
   auto self = sharedFromThis().toWeakRef();
   requestBulkOperation(
       ns, BulkOperations::Manager::Operation::DELETE_KEYS,
-      [this, self, &ns](QRegExp filter, int, const QStringList&) {
+      [this, self, &ns](QRegularExpression filter, int, const QStringList&) {
         if (!self) {
           return;
         }
@@ -383,20 +383,20 @@ void TreeOperations::deleteDbNamespace(ConnectionsTree::NamespaceItem& ns) {
 
 void TreeOperations::setTTL(ConnectionsTree::AbstractNamespaceItem& ns) {
   requestBulkOperation(ns, BulkOperations::Manager::Operation::TTL,
-                       [](QRegExp, int, const QStringList&) {});
+                       [](QRegularExpression, int, const QStringList&) {});
 }
 
 void TreeOperations::copyKeys(ConnectionsTree::AbstractNamespaceItem& ns) {
   requestBulkOperation(ns, BulkOperations::Manager::Operation::COPY_KEYS,
-                       [](QRegExp, int, const QStringList&) {});
+                       [](QRegularExpression, int, const QStringList&) {});
 }
 
 void TreeOperations::importKeysFromRdb(ConnectionsTree::DatabaseItem& db) {
   getReadyConnection([this, &db](QSharedPointer<RedisClient::Connection> c) {
     emit m_events->requestBulkOperation(
         c->clone(), db.getDbIndex(),
-        BulkOperations::Manager::Operation::IMPORT_RDB_KEYS, QRegExp(".*"),
-        [&db](QRegExp, int, const QStringList&) { db.reload(); });
+        BulkOperations::Manager::Operation::IMPORT_RDB_KEYS, QRegularExpression(".*"),
+        [&db](QRegularExpression, int, const QStringList&) { db.reload(); });
   });
 }
 

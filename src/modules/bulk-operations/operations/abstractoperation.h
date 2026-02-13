@@ -1,11 +1,17 @@
 #pragma once
 #include <QObject>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSharedPointer>
 
 #include <qredisclient/connection.h>
 
 namespace BulkOperations {
+
+// 将通配符模式转换为 QRegularExpression
+inline QRegularExpression wildcardToRegex(const QString& pattern) {
+  return QRegularExpression(
+      QRegularExpression::wildcardToRegularExpression(pattern));
+}
 
 class AbstractOperation : public QObject {
   Q_OBJECT
@@ -13,15 +19,14 @@ class AbstractOperation : public QObject {
  public:
   enum class State { READY, RUNNING, FINISHED };
 
-  typedef std::function<void(QRegExp affectedKeysFilter, long processed,
+  typedef std::function<void(QRegularExpression affectedKeysFilter, long processed,
                              const QStringList& errors)>
       OperationCallback;
 
  public:
   AbstractOperation(QSharedPointer<RedisClient::Connection> connection,
                     int dbIndex, OperationCallback callback,
-                    QRegExp keyPattern = QRegExp("*", Qt::CaseSensitive,
-                                                 QRegExp::Wildcard));
+                    QRegularExpression keyPattern = wildcardToRegex("*"));
 
   virtual ~AbstractOperation() {}
 
@@ -41,9 +46,9 @@ class AbstractOperation : public QObject {
 
   int getDbIndex() const;
 
-  QRegExp getKeyPattern() const;
+  QRegularExpression getKeyPattern() const;
 
-  void setKeyPattern(const QRegExp p);
+  void setKeyPattern(const QRegularExpression p);
 
   int currentProgress() const;
 
@@ -66,7 +71,7 @@ class AbstractOperation : public QObject {
  protected:
   QSharedPointer<RedisClient::Connection> m_connection;
   int m_dbIndex;
-  QRegExp m_keyPattern;
+  QRegularExpression m_keyPattern;
   State m_currentState;
   int m_progress;
   QList<QByteArray> m_affectedKeys;

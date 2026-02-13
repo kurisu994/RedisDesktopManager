@@ -82,7 +82,6 @@ bool saveJsonArrayToFile(const QJsonArray &c, const QString &f) {
 
   if (confFile.open(QIODevice::WriteOnly)) {
     QTextStream outStream(&confFile);
-    outStream.setCodec("UTF-8");
     outStream << config.toJson();
     confFile.close();
     return true;

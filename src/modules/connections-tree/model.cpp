@@ -257,7 +257,7 @@ void Model::itemLayoutChanged(QWeakPointer<TreeItem> item) {
   if (!index.isValid()) return;
 
   if (!m_pendingChanges.contains(item)) {
-      qWarning() << "Item " << item << " doesnt have pending layout changes";
+      qWarning() << "Item doesnt have pending layout changes";
       return;
   }
 

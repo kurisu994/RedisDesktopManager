@@ -1,7 +1,7 @@
 #pragma once
 #include <asyncfuture.h>
 #include <QObject>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSharedPointer>
 #include "abstractoperation.h"
 
@@ -12,8 +12,7 @@ class DeleteOperation : public AbstractOperation {
  public:
   DeleteOperation(QSharedPointer<RedisClient::Connection> connection,
                   int dbIndex, OperationCallback callback,
-                  QRegExp keyPattern = QRegExp("*", Qt::CaseSensitive,
-                                               QRegExp::Wildcard));
+                  QRegularExpression keyPattern = wildcardToRegex("*"));
 
   QString getTypeName() const override { return QString("delete_keys"); }
 

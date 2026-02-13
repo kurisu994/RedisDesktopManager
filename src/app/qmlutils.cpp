@@ -10,6 +10,7 @@
 #include <QFileInfo>
 #include <QScreen>
 #include <QtCharts/QDateTimeAxis>
+#include <QtCharts/QAbstractAxis>
 #include <QtConcurrent>
 #include <QUrl>
 
@@ -264,9 +265,7 @@ bool QmlUtils::saveToFile(const QVariant &value, const QString &path) {
   return true;
 }
 
-QtCharts::QDateTimeAxis *findDateTimeAxis(QtCharts::QXYSeries *series) {
-  using namespace QtCharts;
-
+QDateTimeAxis *findDateTimeAxis(QXYSeries *series) {
   QList<QAbstractAxis *> axes = series->attachedAxes();
 
   QDateTimeAxis *ax = nullptr;
@@ -281,9 +280,8 @@ QtCharts::QDateTimeAxis *findDateTimeAxis(QtCharts::QXYSeries *series) {
   return ax;
 }
 
-void QmlUtils::addNewValueToDynamicChart(QtCharts::QXYSeries *series,
+void QmlUtils::addNewValueToDynamicChart(QXYSeries *series,
                                          qreal value) {
-  using namespace QtCharts;
 
   QDateTimeAxis *ax = findDateTimeAxis(series);
 

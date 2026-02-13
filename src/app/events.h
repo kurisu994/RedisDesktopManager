@@ -2,7 +2,7 @@
 #include <qredisclient/connection.h>
 #include <QEnableSharedFromThis>
 #include <QObject>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSharedPointer>
 #include <QString>
 #include <functional>
@@ -35,13 +35,13 @@ class Events : public QObject, public QEnableSharedFromThis<Events> {
 
   void closeDbKeys(QSharedPointer<RedisClient::Connection> connection,
                    int dbIndex,
-                   const QRegExp& filter = QRegExp("*", Qt::CaseSensitive,
-                                                   QRegExp::Wildcard));
+                   const QRegularExpression& filter = QRegularExpression(
+                       QRegularExpression::wildcardToRegularExpression("*")));
 
   // Dialogs
   void requestBulkOperation(
       QSharedPointer<RedisClient::Connection> connection, int dbIndex,
-      BulkOperations::Manager::Operation op, QRegExp keyPattern,
+      BulkOperations::Manager::Operation op, QRegularExpression keyPattern,
       BulkOperations::AbstractOperation::OperationCallback callback);
 
   void newKeyDialog(

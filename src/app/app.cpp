@@ -307,9 +307,11 @@ void Application::registerQmlRootObjects() {
 
 void Application::initQml() {
   if (m_renderingBackend == "auto") {
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
+  } else if (m_renderingBackend == "software") {
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
   } else {
-    QQuickWindow::setSceneGraphBackend(m_renderingBackend);
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
   }
 
   registerQmlTypes();
@@ -319,7 +321,7 @@ void Application::initQml() {
     m_engine.load(QUrl(QStringLiteral("qrc:///app.qml")));
   } catch (...) {
     qDebug() << "Failed to load app window. Retrying with software renderer...";
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
     m_engine.load(QUrl(QStringLiteral("qrc:///app.qml")));
   }
 

@@ -6,7 +6,7 @@
 
 BulkOperations::CopyOperation::CopyOperation(
     QSharedPointer<RedisClient::Connection> connection, int dbIndex,
-    OperationCallback callback, QRegExp keyPattern)
+    OperationCallback callback, QRegularExpression keyPattern)
     : BulkOperations::AbstractOperation(connection, dbIndex, callback,
                                         keyPattern) {
   m_errorMessagePrefix = QCoreApplication::translate("RESP", "Cannot copy key ");

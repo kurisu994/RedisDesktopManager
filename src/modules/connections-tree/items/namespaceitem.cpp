@@ -15,7 +15,7 @@ using namespace ConnectionsTree;
 NamespaceItem::NamespaceItem(const QByteArray &fullPath,
                              QSharedPointer<Operations> operations,
                              QWeakPointer<TreeItem> parent, Model &model,
-                             uint dbIndex, QRegExp filter)
+                             uint dbIndex, QRegularExpression filter)
     : AbstractNamespaceItem(model, parent, operations, dbIndex, filter),
       m_fullPath(fullPath),
       m_removed(false) {}
@@ -33,7 +33,7 @@ QString NamespaceItem::getDisplayName() const {
 }
 
 QByteArray NamespaceItem::getName() const {
-  qsizetype pos = m_fullPath.lastIndexOf(m_operations->getNamespaceSeparator());
+  qsizetype pos = m_fullPath.lastIndexOf(m_operations->getNamespaceSeparator().toUtf8());
 
   if (pos >= 0) {
       return m_fullPath.mid(pos + m_operations->getNamespaceSeparator().size());
@@ -82,7 +82,7 @@ void NamespaceItem::load() {
                          .arg(QString::fromUtf8(m_fullPath))
                          .arg(m_operations->getNamespaceSeparator());
 
-  if (!m_filter.isEmpty()) {
+  if (!m_filter.pattern().isEmpty()) {
     if (m_filter.pattern().startsWith(nsFilter.chopped(1))) {
       nsFilter = m_filter.pattern();
     } else {

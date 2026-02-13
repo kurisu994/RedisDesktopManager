@@ -1,7 +1,7 @@
 #pragma once
 #include <asyncfuture.h>
 #include <QObject>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSharedPointer>
 #include "abstractoperation.h"
 
@@ -12,8 +12,7 @@ class CopyOperation : public AbstractOperation {
  public:
   CopyOperation(QSharedPointer<RedisClient::Connection> connection, int dbIndex,
                 OperationCallback callback,
-                QRegExp keyPattern = QRegExp("*", Qt::CaseSensitive,
-                                             QRegExp::Wildcard));
+                QRegularExpression keyPattern = wildcardToRegex("*"));
 
   QString getTypeName() const override { return QString("copy_keys"); }
 

@@ -2,6 +2,7 @@
 #include <QAbstractListModel>
 #include <QByteArray>
 #include <QPair>
+#include <QRegularExpression>
 #include <QSharedPointer>
 #include <QString>
 #include <functional>
@@ -58,7 +59,7 @@ class TabsModel : public QAbstractListModel {
   void openTab(QSharedPointer<RedisClient::Connection> connection,
                QSharedPointer<ConnectionsTree::KeyItem> key, bool inNewTab);
   void closeDbKeys(QSharedPointer<RedisClient::Connection> connection,
-                   int dbIndex, const QRegExp& filter);
+                   int dbIndex, const QRegularExpression& filter);
 
  private:
   QList<QSharedPointer<ValueViewModel>> m_viewModels;

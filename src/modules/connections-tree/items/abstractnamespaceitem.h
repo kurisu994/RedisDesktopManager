@@ -1,6 +1,6 @@
 #pragma once
 #include <qredisclient/connection.h>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSharedPointer>
 #include <QString>
 #include <QtConcurrent>
@@ -21,7 +21,7 @@ class AbstractNamespaceItem : public QObject, public TreeItem, public MemoryUsag
  public:
   AbstractNamespaceItem(Model& model, QWeakPointer<TreeItem> parent,
                         QSharedPointer<Operations> operations, uint dbIndex,
-                        QRegExp filter = QRegExp());
+                        QRegularExpression filter = QRegularExpression());
 
   virtual ~AbstractNamespaceItem() {}
 
@@ -71,7 +71,7 @@ class AbstractNamespaceItem : public QObject, public TreeItem, public MemoryUsag
 
   virtual QSharedPointer<Operations> operations() { return m_operations; }
 
-  virtual QRegExp getFilter() const { return m_filter; }
+  virtual QRegularExpression getFilter() const { return m_filter; }
 
   virtual void showLoadingError(const QString& err);
 
@@ -92,7 +92,7 @@ class AbstractNamespaceItem : public QObject, public TreeItem, public MemoryUsag
 
   using RenderRawKeysCallback = CallbackWithOwner<TreeItem>;
 
-  void renderRawKeys(const RedisClient::Connection::RawKeysList& keylist, QRegExp filter,
+  void renderRawKeys(const RedisClient::Connection::RawKeysList& keylist, QRegularExpression filter,
                      QSharedPointer<RenderRawKeysCallback> callback,
                      bool appendNewItems,
                      bool checkPreRenderedItems,
@@ -110,7 +110,7 @@ class AbstractNamespaceItem : public QObject, public TreeItem, public MemoryUsag
   QList<QSharedPointer<TreeItem>> m_childItems;
   QHash<QByteArray, QSharedPointer<AbstractNamespaceItem>> m_childNamespaces;
   QList<QByteArray> m_rawChildKeys;
-  QRegExp m_filter;  
+  QRegularExpression m_filter;  
   uint m_dbIndex;
   QSharedPointer<AsyncFuture::Deferred<qlonglong>> m_runningOperation;
   bool m_showNsOnTop;  
