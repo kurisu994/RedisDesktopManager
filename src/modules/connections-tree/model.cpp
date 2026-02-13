@@ -97,9 +97,11 @@ bool Model::hasChildren(const QModelIndex &parent) const {
 
   if (!parentItem->supportChildItems()) return false;
 
-  // Qt6 TreeView 需要 hasChildren 返回 true 才会显示展开箭头
-  // 对于支持子节点的项始终返回 true，允许点击展开触发加载
-  return true;
+  // 数据库节点：即使还没加载 keys 也返回 true（允许展开触发加载）
+  if (parentItem->type() == "database") return true;
+
+  // 命名空间节点：有子项时返回 true
+  return parentItem->childCount() > 0;
 }
 
 QModelIndex Model::getIndexFromItem(QWeakPointer<TreeItem> item) {

@@ -56,7 +56,7 @@ void DatabaseItem::loadKeys(std::function<void()> callback,
                             bool partialReload) {
   lock();
 
-  QString filter = (m_filter.pattern().isEmpty()) ? "" : m_filter.pattern();
+  QString filter = m_filterDisplayPattern.isEmpty() ? "" : m_filterDisplayPattern;
 
   auto self = getSelf().toStrongRef();
 
@@ -120,7 +120,7 @@ void DatabaseItem::loadKeys(std::function<void()> callback,
 
 QVariantMap DatabaseItem::metadata() const {
   QVariantMap metadata = TreeItem::metadata();
-  metadata["filter"] = m_filter.pattern();
+  metadata["filter"] = m_filterDisplayPattern;
   metadata["filterHistory"] = filterHistoryTop10();
   metadata["live_update"] = isLiveUpdateEnabled();
   metadata["user_color"] = m_operations->iconColor();
@@ -132,7 +132,7 @@ void DatabaseItem::setMetadata(const QString& key, QVariant value) {
                        value.toString().isEmpty());
 
   if (key == "filter") {
-    if (!m_filter.pattern().isEmpty() && isResetValue)
+    if (!m_filterDisplayPattern.isEmpty() && isResetValue)
       return resetFilter();
     else if (isResetValue)
       return;
