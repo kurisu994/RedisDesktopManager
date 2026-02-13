@@ -32,7 +32,7 @@ make -j 2
 ```
 
 ### 依赖要求
-- Qt 5.15.2 或更高版本，需要 qtcharts 模块
+- Qt 6 或更高版本，需要 qtcharts 模块
 - 系统库：LZ4, ZSTD, Snappy, Brotli
 - CMake (用于某些第三方依赖)
 - Redis 服务器 (用于集成测试)

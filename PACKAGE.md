@@ -20,24 +20,25 @@
 chmod +x build.sh package.sh
 
 # 构建 Windows 版本
-./build.sh windows 2024.1.0
+./build.sh windows 2026.2.0
 
 # 打包 Windows 版本
-./package.sh windows 2024.1.0
+./package.sh windows 2026.2.0
 
 # 或者一步完成（当前平台）
-./build.sh windows 2024.1.0 && ./package.sh windows 2024.1.0
+./build.sh windows 2026.2.0 && ./package.sh windows 2026.2.0
 ```
 
 ## 🛠️ 环境准备
 
 ### Windows 环境
 
-1. **安装 Qt 5.15.2+**
+1. **安装 Qt 6+**
 
    ```bash
    # 下载并安装 Qt Open Source
-   # 下载地址: https://download.qt.io/archive/qt/5.15/5.15.2/
+   # 下载地址: https://download.qt.io/archive/qt/
+   # 推荐安装 Qt 6.5 或更高版本
    ```
 
 2. **安装 Visual Studio 2019+**
@@ -65,18 +66,18 @@ chmod +x build.sh package.sh
    xcode-select --install
    ```
 
-2. **安装 Qt 5.15.2+**
+2. **安装 Qt 6+**
 
    ```bash
-   # 使用 Homebrew 安装（Qt Charts 已包含在 qt@5 中）
-   brew install qt@5
+   # 使用 Homebrew 安装（Qt Charts 已包含在 qt 中，默认是 6.x 版本）
+   brew install qt
 
    # 将 Qt 添加到 PATH（M1/ARM Mac）
-   echo 'export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"' >> ~/.zshrc
+   echo 'export PATH="/opt/homebrew/opt/qt/bin:$PATH"' >> ~/.zshrc
    source ~/.zshrc
 
    # 或者对于 Intel Mac
-   # echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> ~/.zshrc
+   # echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc
    ```
 
 3. **验证安装**
@@ -97,12 +98,12 @@ chmod +x build.sh package.sh
    # Ubuntu/Debian
    sudo apt-get update
    sudo apt-get install qtbase5-dev qtdeclarative5-dev qtquickcharts5-dev
-   sudo apt-get install qt5-qmake qttools5-dev-tools build-essential
+   sudo apt-get install qt6-qmake qttools5-dev-tools build-essential
    sudo apt-get install liblz4-dev libzstd-dev libbrotli-dev libsnappy-dev
 
    # CentOS/RHEL/Fedora
-   sudo dnf install qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtcharts-devel
-   sudo dnf install qt5-qttools-devel gcc-c++ make
+   sudo dnf install qt6-qtbase-devel qt6-qtdeclarative-devel qt6-qtcharts-devel
+   sudo dnf install qt6-qttools-devel gcc-c++ make
    sudo dnf install lz4-devel zstd-devel brotli-devel snappy-devel
    ```
 
@@ -142,7 +143,7 @@ cd src
 
 # 配置项目
 qmake "CONFIG+=release" \
-       "DEFINES+=APP_VERSION=\\\"2024.1.0\\\"" \
+       "DEFINES+=APP_VERSION=\\\"2026.2.0\\\"" \
        "SYSTEM_LZ4=1" "SYSTEM_ZSTD=1" "SYSTEM_SNAPPY=1" "SYSTEM_BROTLI=1"
 
 # 编译
@@ -160,7 +161,7 @@ cd src
 
 # 配置项目
 qmake "CONFIG+=release" \
-       "DEFINES+=APP_VERSION=\\\"2024.1.0\\\"" \
+       "DEFINES+=APP_VERSION=\\\"2026.2.0\\\"" \
        "SYSTEM_LZ4=1" "SYSTEM_ZSTD=1" "SYSTEM_SNAPPY=1" "SYSTEM_BROTLI=1"
 
 # 编译
@@ -179,7 +180,7 @@ cd src
 
 # 配置项目
 qmake "CONFIG+=release" \
-       "DEFINES+=APP_VERSION=\\\"2024.1.0\\\"" \
+       "DEFINES+=APP_VERSION=\\\"2026.2.0\\\"" \
        "SYSTEM_LZ4=1" "SYSTEM_ZSTD=1" "SYSTEM_SNAPPY=1" "SYSTEM_BROTLI=1" \
        "CLEAN_RPATH=1"
 
@@ -218,8 +219,8 @@ chmod +x ../bin/linux/release/resp
 **自动化打包：**
 
 ```bash
-./package.sh windows 2024.1.0
-# 输出：packages/2024.1.0/resp-2024.1.0.exe
+./package.sh windows 2026.2.0
+# 输出：packages/2026.2.0/resp-2026.2.0.exe
 ```
 
 **手动打包：**
@@ -228,7 +229,7 @@ chmod +x ../bin/linux/release/resp
 cd build/windows/installer
 
 # 编辑版本号（如果需要）
-sed -i 's/resp-VERSION/resp-2024.1.0/g' installer.nsi
+sed -i 's/resp-VERSION/resp-2026.2.0/g' installer.nsi
 
 # 运行 NSIS
 makensis installer.nsi
@@ -248,8 +249,8 @@ makensis installer.nsi
 **自动化打包：**
 
 ```bash
-./package.sh macos 2024.1.0
-# 输出：packages/2024.1.0/RESP-2024.1.0.dmg
+./package.sh macos 2026.2.0
+# 输出：packages/2026.2.0/RESP-2026.2.0.dmg
 ```
 
 **手动打包：**
@@ -260,7 +261,7 @@ macdeployqt bin/osx/release/RESP.app
 
 # 2. 更新 Info.plist
 cp src/resources/Info.plist.sample bin/osx/release/RESP.app/Contents/Info.plist
-sed -i '' 's/0.0.0/2024.1.0/g' bin/osx/release/RESP.app/Contents/Info.plist
+sed -i '' 's/0.0.0/2026.2.0/g' bin/osx/release/RESP.app/Contents/Info.plist
 
 # 3. 创建 DMG
 mkdir dmg_temp
@@ -270,7 +271,7 @@ ln -s /Applications dmg_temp/Applications
 hdiutil create -volname "RESP" \
              -srcfolder dmg_temp \
              -ov -format UDZO \
-             RESP-2024.1.0.dmg
+             RESP-2026.2.0.dmg
 
 rm -rf dmg_temp
 ```
@@ -288,10 +289,10 @@ rm -rf dmg_temp
 **自动化打包：**
 
 ```bash
-./package.sh linux 2024.1.0
+./package.sh linux 2026.2.0
 # 输出：
-# - packages/2024.1.0/RESP-2024.1.0-linux-x86_64.tar.gz
-# - packages/2024.1.0/resp-app_2024.1.0_amd64.deb (如果可用)
+# - packages/2026.2.0/RESP-2026.2.0-linux-x86_64.tar.gz
+# - packages/2026.2.0/resp-app_2026.2.0_amd64.deb (如果可用)
 ```
 
 **手动打包：**
@@ -315,7 +316,7 @@ EOF
 
 # 4. 创建压缩包
 cd resp_app_pkg
-tar -czf ../RESP-2024.1.0-linux-x86_64.tar.gz .
+tar -czf ../RESP-2026.2.0-linux-x86_64.tar.gz .
 cd ..
 rm -rf resp_app_pkg
 ```
@@ -363,7 +364,7 @@ rm -rf resp_app_pkg
 # 解决方案
 export PATH=$PATH:/path/to/qt/bin
 # 或
-sudo apt-get install qt5-qmake  # Linux
+sudo apt-get install qt6-qmake  # Linux
 ```
 
 **问题**: `fatal error: 'QtCharts/QChartView': file not found`
@@ -408,7 +409,7 @@ SetCompressor /SOLID /FINAL lzma
 ```bash
 # 解决方案
 # 安装系统依赖
-sudo apt-get install libqt5charts5 libqt5gui5 libqt5core5a
+sudo apt-get install libqt6charts6 libqt6gui6 libqt6core6
 
 # 或使用静态链接
 qmake "CONFIG+=static"
@@ -452,9 +453,9 @@ sudo ./install.sh
 
 | 平台    | 构建工具      | 打包工具       | 输出格式      | 依赖                          |
 | ------- | ------------- | -------------- | ------------- | ----------------------------- |
-| Windows | qmake + nmake | NSIS           | .exe          | Qt 5.15+, VC++ 2019+, OpenSSL |
-| macOS   | qmake + make  | hdiutil        | .dmg          | Qt 5.15+, Xcode tools         |
-| Linux   | qmake + make  | tar + dpkg-deb | .tar.gz, .deb | Qt 5.15+, system libs         |
+| Windows | qmake + nmake | NSIS           | .exe          | Qt 6+, VC++ 2019+, OpenSSL |
+| macOS   | qmake + make  | hdiutil        | .dmg          | Qt 6+, Xcode tools         |
+| Linux   | qmake + make  | tar + dpkg-deb | .tar.gz, .deb | Qt 6+, system libs         |
 
 ## 🎯 最佳实践
 

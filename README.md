@@ -19,6 +19,8 @@
 - **HyperLogLog** - 基数统计
 - **Bitmap** - 位图操作
 - **GEO** - 地理位置数据
+- **BloomFilter (BF)** - 布隆过滤器
+- **CuckooFilter (CF)** - 布谷鸟过滤器
 
 ### 🔧 高级功能
 - **批量操作** - 大规模数据的导入导出和批量处理
@@ -31,6 +33,8 @@
 - **扩展系统** - 插件架构，支持自定义格式化器和功能扩展
 - **实时监控** - 服务器状态和性能监控
 - **暗色模式** - 自适应系统主题
+- **连接树优化** - 高性能连接树视图，支持快速导航
+- **服务器操作** - 完善的服务器管理和操作界面
 
 ### 📊 数据可视化
 - **内存分析** - Redis 内存使用情况分析
@@ -106,7 +110,7 @@ sudo snap install redis-desktop-manager
 ### 环境要求
 
 **通用依赖**：
-- Qt 5.15.2+ (包含 qtcharts 模块)
+- Qt 6+ (包含 qtcharts 模块)
 - qredisclient (Redis 客户端库)
 - CMake 3.15+ (某些第三方依赖)
 - Git (获取源码)
@@ -124,21 +128,21 @@ git clone --recursive git@github.com:kurisu994/RedisDesktopManager.git rdm
 cd rdm
 
 # 构建 (选择平台)
-./build.sh windows 2024.1.0    # Windows
-./build.sh macos 2024.1.0      # macOS
-./build.sh linux 2024.1.0      # Linux
+./build.sh windows 2026.2.0    # Windows
+./build.sh macos 2026.2.0      # macOS
+./build.sh linux 2026.2.0      # Linux
 ```
 
 ### 打包发布
 
 ```bash
 # 打包所有平台
-./package.sh all 2024.1.0
+./package.sh all 2026.2.0
 
 # 打包特定平台
-./package.sh windows 2024.1.0  # Windows EXE
-./package.sh macos 2024.1.0    # macOS DMG
-./package.sh linux 2024.1.0    # Linux TAR.GZ + DEB
+./package.sh windows 2026.2.0  # Windows EXE
+./package.sh macos 2026.2.0    # macOS DMG
+./package.sh linux 2026.2.0    # Linux TAR.GZ + DEB
 ```
 
 详细的构建和打包指南请参考 [PACKAGE.md](PACKAGE.md)。
@@ -147,23 +151,24 @@ cd rdm
 
 ```bash
 # 安装开发依赖
-# Linux
-sudo apt-get install qtbase5-dev qtdeclarative5-dev qtquickcharts5-dev qt5-qmake
+# Linux (Qt 6)
+sudo apt-get install qt6-base-dev qt6-declarative-dev qt6-charts-dev qt6-qmake
 
-# macOS
-brew install qt@5 qtcharts cmake
+# macOS (Qt 6)
+brew install qt cmake
 
-# Windows (使用 vcpkg)
-vcpkg install qt5 qt5-charts openssl
+# Windows (使用 vcpkg，Qt 6)
+vcpkg install qt6 qt6-charts openssl
 
 # 运行测试
 cd tests
-qmake && make
-./tests
+qmake "SYSTEM_LZ4=1" "SYSTEM_ZSTD=1" "SYSTEM_SNAPPY=1" "SYSTEM_BROTLI=1" DEFINES+=INTEGRATION_TESTS
+make -j 2
+./../bin/tests/tests -platform minimal -txt
 
 # 构建 Qt 项目
 cd src
-qmake "CONFIG+=debug" "DEFINES+=APP_VERSION=\\\"dev\\\""
+qmake "CONFIG+=debug" "DEFINES+=APP_VERSION=\\\"dev\\\"" "SYSTEM_LZ4=1" "SYSTEM_ZSTD=1" "SYSTEM_SNAPPY=1" "SYSTEM_BROTLI=1"
 make
 ```
 
@@ -322,10 +327,12 @@ qmake "DEFINES+=INTEGRATION_TESTS" && make
 ## 🎯 路线图
 
 - [x] **多平台支持** - Windows, macOS, Linux 完全支持
-- [x] **Redis 7.0 兼容** - 支持最新 Redis 版本特性
+- [x] **Redis 7.0+ 兼容** - 支持最新 Redis 版本特性
 - [x] **ARM64 支持** - Apple Silicon 和 ARM Linux 原生支持
 - [x] **云端集成** - 完整的云服务集成
 - [x] **高 DPI 支持** - 现代显示器的完美支持
+- [x] **BF/CF 支持** - 布隆过滤器和布谷鸟过滤器支持
+- [x] **连接树优化** - 高性能连接树视图，支持快速导航
 - [ ] **移动应用** - iOS 和 Android 客户端 (计划中)
 - [ ] **Web 界面** - 基于浏览器的 Redis 管理工具 (考虑中)
 - [ ] **集群管理** - Redis Cluster 的专门支持 (改进中)

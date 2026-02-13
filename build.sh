@@ -67,7 +67,7 @@ check_requirements() {
             ;;
         linux)
             if ! command -v qmake &> /dev/null; then
-                log_error "qmake 未找到，请安装 qt5-qmake"
+                log_error "qmake 未找到，请安装 qt6-qmake"
                 exit 1
             fi
             if ! command -v make &> /dev/null; then
@@ -252,12 +252,12 @@ show_help() {
     echo "  help       显示此帮助信息"
     echo ""
     echo "示例:"
-    echo "  $0 windows 2024.1.0"
-    echo "  $0 macos 2024.1.0"
-    echo "  $0 linux 2024.1.0"
+    echo "  $0 windows 2026.2.0"
+    echo "  $0 macos 2026.2.0"
+    echo "  $0 linux 2026.2.0"
     echo ""
     echo "环境变量:"
-    echo "  VERSION    设置版本号 (默认: 2024.1.0-dev)"
+    echo "  VERSION    设置版本号 (默认: 2026.2.0-dev)"
     echo ""
     echo "下一步运行打包:"
     echo "  ./package.sh $0 $VERSION"

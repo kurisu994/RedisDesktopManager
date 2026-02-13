@@ -392,7 +392,7 @@ Version: $pkg_version
 Section: devel
 Priority: optional
 Architecture: amd64
-Depends: libqt5charts5, libqt5gui5, libqt5core5a, libqt5qml5, libqt5quick5, libqt5widgets5, libqt5network5, libqt5concurrent5, libqt5svg5
+Depends: libqt6charts6, libqt6gui6, libqt6core6, libqt6qml6, libqt6quick6, libqt6widgets6, libqt6network6, libqt6concurrent6, libqt6svg6
 Maintainer: Igor Malinovskiy <support@resp.app>
 Description: Open source Developer GUI for Redis®
  RESP.app is a powerful, cross-platform Redis database management tool.
@@ -466,13 +466,13 @@ show_help() {
     echo "  help       显示此帮助信息"
     echo ""
     echo "示例:"
-    echo "  $0 windows 2024.1.0"
-    echo "  $0 macos 2024.1.0"
-    echo "  $0 linux 2024.1.0"
-    echo "  $0 all 2024.1.0"
+    echo "  $0 windows 2026.2.0"
+    echo "  $0 macos 2026.2.0"
+    echo "  $0 linux 2026.2.0"
+    echo "  $0 all 2026.2.0"
     echo ""
     echo "环境变量:"
-    echo "  VERSION    设置版本号 (默认: 2024.1.0-dev)"
+    echo "  VERSION    设置版本号 (默认: 2026.2.0-dev)"
     echo ""
     echo "输出目录:"
     echo "  packages/VERSION/"

@@ -36,12 +36,12 @@ update-desktop-database /usr/share/applications/
 
 **解决方案**：
 ```bash
-# Ubuntu/Debian
+# Ubuntu/Debian (Qt 6)
 sudo apt-get update
-sudo apt-get install qtbase5-dev qtdeclarative5-dev qtquickcharts5-dev qt5-qmake qttools5-dev-tools qtquickcontrols2-5-dev qt5-svg-dev qt5-websockets-dev qt5-x11extras-dev build-essential
+sudo apt-get install qt6-base-dev qt6-declarative-dev qt6-charts-dev qt6-qmake qt6-tools-dev qt6-quickcontrols2-dev qt6-svg-dev qt6-websockets-dev qt6-x11extras-dev build-essential
 
-# CentOS/RHEL/Fedora
-sudo dnf install qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtquickcharts-devel qt5-qttools-devel qt5-qtquickcontrols2-devel qt5-qtsvg-devel qt5-qtwebsockets-devel qt5-qtx11extras-devel gcc-c++ make cmake
+# CentOS/RHEL/Fedora (Qt 6)
+sudo dnf install qt6-qtbase-devel qt6-qtdeclarative-devel qt6-qtcharts-devel qt6-qttools-devel qt6-qtquickcontrols2-devel qt6-qtsvg-devel qt6-qtwebsockets-devel qt6-qtx11extras-devel gcc-c++ make cmake
 ```
 
 ## 连接问题
